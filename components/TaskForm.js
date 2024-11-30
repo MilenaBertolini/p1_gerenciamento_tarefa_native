@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, Pressable } from 'react-native';
+import { RadioButton } from 'react-native-paper';
 
 const TaskForm = ({ addOrEditTask, taskToEdit }) => {
 
@@ -23,7 +24,7 @@ const TaskForm = ({ addOrEditTask, taskToEdit }) => {
     addOrEditTask(name, description, priority);
     setName('');
     setDescription('');
-    setPriority('Média');
+    setPriority('');
 
   };
 
@@ -45,29 +46,42 @@ const TaskForm = ({ addOrEditTask, taskToEdit }) => {
         onChangeText={setDescription}
       />
 
-      <View style={styles.priorityGroup}>
+      <Text style={styles.textPriority}>Prioridade:</Text>
 
-        {['Alta', 'Média', 'Baixa'].map((level) => (
-          <Pressable
-            key={level}
-            style={[styles.priorityButton, priority === level && styles.prioritySelected]}
-            onPress={() => setPriority(level)}
-          >
-            <Text style={styles.priorityText}>{level}</Text>
-          </Pressable>
-        ))}
-
+      <View style={styles.priorityContainer}>
+        
+        <RadioButton.Group
+          onValueChange={value => setPriority(value)}
+          value={priority}
+        >
+          <View style={styles.radioButtonRow}>
+            <Text>Alta</Text>
+            <RadioButton value="Alta" 
+            style={styles.radio}/>
+          </View>
+          
+          <View style={styles.radioButtonRow}>
+            <Text>Média</Text>
+            <RadioButton value="Média" />
+          </View>
+          
+          <View style={styles.radioButtonRow}>
+            <Text>Baixa</Text>
+            <RadioButton value="Baixa" />
+          </View>
+        </RadioButton.Group>
       </View>
 
       <Pressable style={styles.submitButton} onPress={handleSubmit}>
         <Text style={styles.submitText}>{taskToEdit ? 'Salvar' : 'Adicionar'}</Text>
       </Pressable>
-      
+
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+
   form: {
     backgroundColor: '#fff',
     padding: 16,
@@ -75,6 +89,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     elevation: 3,
   },
+
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
@@ -82,10 +97,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
   },
+
   priorityGroup: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+
   priorityButton: {
     padding: 10,
     borderRadius: 5,
@@ -95,25 +112,37 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     alignItems: 'center',
   },
+
   prioritySelected: {
-    backgroundColor: '#6200ee',
-    borderColor: '#6200ee',
+    backgroundColor: '#9576FF',
+    borderColor: '#9576FF',
   },
-  priorityText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
+
   submitButton: {
     backgroundColor: '#6200ee',
     padding: 12,
     marginTop: 10,
     borderRadius: 5,
   },
+
   submitText: {
     color: '#fff',
     textAlign: 'center',
     fontWeight: 'bold',
   },
+
+  priorityContainer: {
+    marginBottom: 20,
+    flex: 1,
+    flexDirection: 'row',
+  },
+
+  textPriority: {
+    fontWeight: 'bold',
+    marginBottom: 10,
+    marginTop: 16,
+  },
+
 });
 
 export default TaskForm;
